@@ -1,9 +1,9 @@
 import React from "react";
-import logo from "../logo.svg";
+import logo from "../img/logo128.png"
+import addArticle from "../img/add128.png"
 import "../App.css";
 import { Stack, IconButton, Typography } from "@mui/material";
 import { useNavigate, useParams} from "react-router-dom";
-import { AddComment } from "@mui/icons-material";
 
 function Header() {
   const navigate = useNavigate();
@@ -15,15 +15,15 @@ function Header() {
 
   return (
     <header className="App-header">
-      <Stack direction={"row"} sx={{ alignItems: "center" }}>
-        <IconButton color="primary" name="/" onClick={navigateTo}>
+      <Stack direction={"row"} sx={{alignItems: "center" }}>
+        <IconButton name="/" onClick={navigateTo}>
           <img src={logo} className="App-logo" alt="logo" />
+        <Typography variant="h5" sx={{ml:1, color: "primary.contrastText"}}>i3 blog</Typography>
         </IconButton>
-        <Typography variant="h6">i3 blog</Typography>
       </Stack>
       <Stack>
-        <IconButton color="primary" name="/article" onClick={navigateTo}>
-          <AddComment sx={{fontSize:40}} />
+        <IconButton sx={{height:"20px"}} color="secondary" name="/article" onClick={navigateTo}>
+          <img src={addArticle} width={"100%"} height={"50vh"} alt="addArticle"/>
         </IconButton>
       </Stack>
     </header>

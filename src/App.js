@@ -3,18 +3,41 @@ import Header from "./components/Header";
 import { BrowserRouter, Route, Router, Routes } from "react-router-dom";
 import NewArticle from "./components/NewArticle";
 import Home from "./components/Home";
+import { createTheme, ThemeProvider } from "@mui/material";
 
 function App() {
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: "#282c34",
+        light: "#50555e",
+        dark: "#00000d",
+        contrastText: "#ffffff",
+      },
+      secondary: {
+        main: "#f00",
+        light: "#ff7961",
+        dark: "#ba000d",
+        contrastText: "#00000",
+      },
+      white: {
+        main: "#fff",
+      },
+    },
+  });
+
   return (
-    <div className="App">
-      <BrowserRouter>
-        <Header />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/article" element={<NewArticle />} />
-        </Routes>
-      </BrowserRouter>
-    </div>
+    <ThemeProvider theme={theme}>
+      <div className="App">
+        <BrowserRouter>
+          <Header />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/article" element={<NewArticle />} />
+          </Routes>
+        </BrowserRouter>
+      </div>
+    </ThemeProvider>
   );
 }
 

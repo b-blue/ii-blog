@@ -1,5 +1,5 @@
-import { PictureAsPdfSharp } from "@mui/icons-material";
 import {
+  Box,
   Button,
   Card,
   CardActions,
@@ -12,7 +12,7 @@ import {
   Typography,
 } from "@mui/material";
 import axios from "axios";
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import { apiInterface } from "../api-interface/api-interface";
@@ -46,9 +46,19 @@ function NewArticle() {
   // On submit, article is uploaded
   const submit = async (e) => {
     e.preventDefault();
-    await axios.put(apiInterface.route, newArticle).then((res) => {
-      console.log(res);
-    });
+    // only upload if all three values are filled out
+    if (
+      newArticle.Title.length > 0 &&
+      newArticle.Author.length > 0 &&
+      newArticle.Body.length > 0
+    ) {
+      // save author ident for future use
+      localStorage.setItem("author", newArticle.Author);
+      // upload article
+      await axios.put(apiInterface.route, newArticle).then((res) => {
+        console.log(res);
+      });
+    }
   };
 
   // When control loses focus, value is updated
@@ -86,19 +96,27 @@ function NewArticle() {
           res.headers[picsumHandler.headerVal] +
           picsumHandler.idUrlSuffix,
       }));
+
       setPicsumHandler((picsumHandler) => ({
         ...picsumHandler,
         ["loading"]: false,
       }));
     });
+
+    if (localStorage.getItem("author")) {
+      setNewArticle((newArticle) => ({
+        ...newArticle,
+        ["Author"]: localStorage.getItem("author"),
+      }));
+    }
   }, []);
 
   return (
     <>
       {picsumHandler.loading ? (
         <Grid container sx={{ justifyContent: "center" }}>
-          <Grid item >
-            <Grid container sx={{mt:2, maxWidth:500}}>
+          <Grid item>
+            <Grid container sx={{ mt: 2, maxWidth: 500 }}>
               <Grid item xs={12}>
                 <Skeleton
                   variant="rectangular"
@@ -168,8 +186,14 @@ function NewArticle() {
                 </Grid>
               </CardContent>
               <CardActions>
-                <Button onClick={() => navigate(-1)}>Back</Button>
-                <Button onClick={submit}>Submit</Button>
+                <Stack spacing={2} direction={"row"}>
+                  <Button variant="outlined" color={"primary"} onClick={() => navigate(-1)}>
+                    Back
+                  </Button>
+                  <Button variant="outlined" color={"primary"} onClick={submit}>
+                    Submit
+                  </Button>
+                </Stack>
               </CardActions>
             </Card>
           </Grid>
