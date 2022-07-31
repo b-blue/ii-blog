@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Router, Routes } from "react-router-dom";
 import NewArticle from "./components/NewArticle";
 import Home from "./components/Home";
 import { createTheme, ThemeProvider } from "@mui/material";
+import Article from "./components/Article";
 
 function App() {
   const theme = createTheme({
@@ -33,7 +34,8 @@ function App() {
           <Header />
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/article" element={<NewArticle />} />
+            <Route path="/article/:id" element={<Article />} />
+            <Route path="/new" element={<NewArticle />} />
           </Routes>
         </BrowserRouter>
       </div>

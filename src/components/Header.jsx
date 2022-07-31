@@ -7,7 +7,6 @@ import { useNavigate, useParams} from "react-router-dom";
 
 function Header() {
   const navigate = useNavigate();
-  const params = useParams();
 
   const navigateTo = (event) => {
     navigate(event.currentTarget.name);
@@ -22,7 +21,7 @@ function Header() {
         </IconButton>
       </Stack>
       <Stack>
-        <IconButton sx={{height:"20px"}} color="secondary" name="/article" onClick={navigateTo}>
+        <IconButton sx={{height:"20px"}} color="secondary" name="/new" onClick={navigateTo}>
           <img src={addArticle} width={"100%"} height={"50vh"} alt="addArticle"/>
         </IconButton>
       </Stack>
