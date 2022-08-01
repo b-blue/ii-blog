@@ -72,7 +72,7 @@ function Article() {
     article.PublicationDate = getPublicationDate();
     await apiSave(article).then((success) => {
       if (success) {
-        navigate("/article/" + article.Id);
+        window.location.reload();
       }
     });
   };
@@ -101,7 +101,7 @@ function Article() {
         <LoadingArticle />
       ) : (
         <Grid container sx={{ justifyContent: "center" }}>
-          <Grid item xs={5} sx={{ justifyContent: "center" }}>
+        <Grid item xs={12} sm={5} sx={{ justifyContent: "center" }}>
             <Card sx={{ mt: 2 }}>
               <CardMedia>
                 <img src={article.Pic} alt={article.Pic} />

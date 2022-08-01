@@ -141,7 +141,7 @@ function NewArticle() {
         <LoadingArticle />
       ) : (
         <Grid container sx={{ justifyContent: "center" }}>
-        <Grid item xs={5} sx={{ justifyContent: "center" }}>
+        <Grid item xs={12} sm={5} sx={{ justifyContent: "center" }}>
             <Card sx={{ mt: 2 }}>
               <CardMedia>
                 <img src={newArticle.Pic} />
