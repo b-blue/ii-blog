@@ -69,7 +69,7 @@ function Article() {
   const saveArticle = async (event) => {
     event.preventDefault();
     // update publication date
-    article.PublicationDate = "Last edited at " + getPublicationDate();
+    article.PublicationDate = "Last edited " + getPublicationDate();
     await apiSave(article).then((success) => {
       if (success) {
         window.location.reload();
