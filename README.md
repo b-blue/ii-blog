@@ -1,27 +1,43 @@
 # I3 Blog
 
-This project is a hypothetical internal company blog that allows users to add, edit and delete articles. Searching by article title is also supported. 
+This project is a hypothetical internal company blog that allows users to add, edit and delete articles. The landing page is a list of all articles, and searching for a specific article in this list by title is supported. 
 
-## Development Process
+You can check out a live demo of this application [by clicking here.](https://blog.b-blue.dev)
 
-For this application, I knew I wanted a React frontend because I've built several React apps already and find its architecture matches my thinking about designing and re-using frontend components. I also like the Material UI library for its simplicity and presentation, axios as an HTTP client, and react-router-dom for simple routing. 
+---
+
+## Application Design
+
+||Frontend|Backend|
+|---|---|---|
+|Built using|React|Amazon Web Services|
+|Design|Material UI|
+|Routing|react-router-dom|API Gateway|
+|HTTP|axios|Lambda Functions|
+|Persistence| |DynamoDB|
+
+For this application, I knew I wanted a React frontend because I've built several React apps already and find its architecture matches my thinking about designing and reusing frontend components. The frontend is written in ES6 and JSX. I also like the Material UI library for its simplicity and presentation, `axios` as an HTTP client, and `react-router-dom` for simple routing. 
 
 Each feature in the spec represented a particular view to me:
-    - /home/ shows the list of all articles. 
-    - /new/ provides a panel where a new article can be composed and submitted.
-    - /id/ provides a panel where an existing article can be viewed, edited and saved. 
-        - This panel also allows an article to be deleted, so that all editing operations are in a single part of the application. 
-    - /search/ provides a field where users can search for a specific post by title. 
+- `/` shows the list of all articles. It is the "home page" of the app.
+- `/new/` provides a panel where a new article can be composed and submitted.
+- `/article/{id}/` provides a panel where an existing article can be viewed, edited and saved. This panel also allows an article to be deleted, so that all editing operations are in a single part of the application. 
 
-For the backend, I decided on a simple Lambda controller that persists articles to a DynamoDb table through Amazon Web Services' API Gateway. I want my applications to be scalabe and extensible, and cloud solutions are perfect for that. 
-    - The code for the Lambda controller is in the LambdaController.js file. 
+For the backend, I decided on a simple Lambda controller that persists articles to a DynamoDb table through Amazon Web Services' API Gateway. Distributing the API into discrete routes that can each be tied to a separate Lambda integration gives flexibility to the backend for future requirements. without altering the frontend consumption patterns. 
 
-## Composition
+---
 
-While I hardcoded the article schema for brevity, I could also have used the useReducer hook with calls to a dispatcher. I think that's a more elegant approach, especially when used in conjunction with the useContext hook for state management, but here I was moving quick! 
+## Controller
 
-The UUID/GUID identifying the article is generated on the frontend because UUIDs do not repeat. Offloading this concern keeps my controller simple. If I were making a standalone backend application rather than a cloud badckend I could also consider moving some of these processes to the implementation class of a given controller's interface, also to prevent a "busy controller." 
+The controller is invoked from the frontend by the `src/api-interface/api-interface.js` class. There are four basic operations: 
 
-I used the HTTP PUT verb because it allowed me to use the same endpoint to add or create resources (it's idempotent - after the first call, it just does the same thing). My DynamoDB table's key was the Id property of the payload object, so if it found a matching key it simply overwrites the record. 
+- `GET` | `apiGetAll` 
+    - This function retrieves all articles in the DynamoDB table. 
+- `GET` | `apiGet(id)`
+    - This function retrieves a single article using its id as a handle.
+- `PUT` | `apiSave`
+    - This function leverages the idempotence of the HTTP PUT verb to both save new articles, and to update existing articles.
+- `DELETE` | `apiDelete(id)`
+    - This function deletes an article using its id as an identifier. The user is prompted to confirm deletion by separate logic before this method is invoked. 
 
-The bonus feature of searching by title is implemented as a simple filter on the retrieved posts. If the query is empty (as in the case of hitting backspace until the box contains no text)
+The backend implementation of the controller, which runs as a Lambda function, is available in the `src/LambdaController.js` file. The contents of this file are identical to the AWS Lambda function.
