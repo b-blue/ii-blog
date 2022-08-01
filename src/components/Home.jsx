@@ -8,24 +8,16 @@ import {
   ImageListItemBar,
   Typography,
 } from "@mui/material";
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { apiInterface } from "../api-interface/api-interface";
+import { apiGetAll } from "../services/api-interface";
 
 function Home() {
   const navigate = useNavigate();
   const [posts, setPosts] = useState([]);
 
-  const getPosts = async () => {
-    await axios.get(apiInterface.route).then((res) => {
-      console.log(res);
-      setPosts(res.data.Items);
-    });
-  };
-
   useEffect(() => {
-    getPosts();
+    apiGetAll().then((val) => setPosts(val));
   }, []);
 
   const readArticle = (event) => {
@@ -50,7 +42,6 @@ function Home() {
             {posts.map((item) => (
               <ImageListItem key={item.Id}>
                 <img src={item.Pic} alt={item.title} />
-
                 <ImageListItemBar
                   title={<Typography>{item.Title}</Typography>}
                   subtitle={item.Author}

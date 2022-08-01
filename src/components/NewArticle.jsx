@@ -7,22 +7,20 @@ import {
   CardMedia,
   Grid,
   Stack,
+  Switch,
   TextField,
   Typography,
 } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
-import {
-  apiInterface,
-  getPublicationDate,
-  saveArticle,
-} from "../api-interface/api-interface";
+import { getPublicationDate, apiSave, apiGet } from "../services/api-interface";
 import LoadingArticle from "./LoadingArticle";
 
 function NewArticle() {
   const navigate = useNavigate();
+  const [edit, setEdit] = useState(false);
   const [newArticle, setNewArticle] = useState({
     Id: uuidv4(),
     Title: "Text",
@@ -31,6 +29,7 @@ function NewArticle() {
     Body: "",
     Pic: "",
   });
+  const [article, setArticle] = useState();
 
   const [picsumHandler, setPicsumHandler] = useState({
     loading: true,
@@ -59,12 +58,27 @@ function NewArticle() {
       // save author ident for future use
       localStorage.setItem("author", newArticle.Author);
       // upload article
-      await saveArticle(newArticle).then((success) => {
+      await apiSave(newArticle).then((success) => {
         if (success) {
           navigate("/");
         }
       });
     }
+  };
+
+  const save = async (event) => {
+    event.preventDefault();
+    // update publication date
+    article.PublicationDate = getPublicationDate();
+    await apiSave(article).then((success) => {
+      if (success) {
+        navigate("/article/" + article.Id);
+      }
+    });
+  };
+
+  const setEditMode = async () => {
+    setEdit(!edit);
   };
 
   // When control loses focus, value is updated
@@ -87,13 +101,15 @@ function NewArticle() {
     }));
   };
 
-  // Quick processing to get the pic url for this post
+  
   useEffect(() => {
+    // Let page know we're waiting for a pic
     setPicsumHandler((picsumHandler) => ({
       ...picsumHandler,
       ["loading"]: true,
     }));
 
+    // Grab the pic and save it to the new article
     axios.get(picsumHandler.baseUrl).then((res) => {
       setNewArticle((newArticle) => ({
         ...newArticle,
@@ -103,12 +119,14 @@ function NewArticle() {
           picsumHandler.idUrlSuffix,
       }));
 
+      // Let the page know we're done.
       setPicsumHandler((picsumHandler) => ({
         ...picsumHandler,
         ["loading"]: false,
       }));
     });
 
+    // If the user has made an entry before, get their saved name from storage.
     if (localStorage.getItem("author")) {
       setNewArticle((newArticle) => ({
         ...newArticle,
@@ -123,8 +141,8 @@ function NewArticle() {
         <LoadingArticle />
       ) : (
         <Grid container sx={{ justifyContent: "center" }}>
-          <Grid item>
-            <Card sx={{ mt: 2, maxWidth: 500 }}>
+        <Grid item xs={5} sx={{ justifyContent: "center" }}>
+            <Card sx={{ mt: 2 }}>
               <CardMedia>
                 <img src={newArticle.Pic} />
               </CardMedia>

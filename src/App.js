@@ -1,6 +1,6 @@
 import "./App.css";
 import Header from "./components/Header";
-import { BrowserRouter, Route, Router, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import NewArticle from "./components/NewArticle";
 import Home from "./components/Home";
 import { createTheme, ThemeProvider } from "@mui/material";
