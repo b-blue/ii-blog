@@ -35,7 +35,7 @@ export const apiGet = async (id) => {
 // Wrapper for axios get all articles in table
 export const apiGetAll = async () => {
   return await axios.get(apiInterface.route).then((res) => {
-    return res.data.Items.sort((a,b) => {return (a.getPublicationDate > b.getPublicationDate) ?  1 : -1});
+    return res.data.Items.sort((a,b) => {return (a.Title > b.Title) ?  1 : -1});
   });
 }
 
