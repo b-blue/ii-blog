@@ -69,7 +69,7 @@ function Article() {
   const saveArticle = async (event) => {
     event.preventDefault();
     // update publication date
-    article.PublicationDate = getPublicationDate();
+    article.PublicationDate = "Last edited at " + getPublicationDate();
     await apiSave(article).then((success) => {
       if (success) {
         window.location.reload();
@@ -90,7 +90,6 @@ function Article() {
   // Deletes this article after user agrees.
   const deleteArticle = async () => {
     apiDelete(article.Id).then((val) => {
-      console.log(val);
       navigate("/");
     });
   };
@@ -160,7 +159,7 @@ function Article() {
                     <Stack sx={{ mt: 2 }}>
                       {!edit && (
                         <>
-                          <Typography variant={"body1"}>
+                          <Typography variant={"body1"} align={"left"} sx={{whiteSpace:"pre-line"}}>
                             {article.Body}
                           </Typography>
                         </>
@@ -170,7 +169,7 @@ function Article() {
                           <Typography variant={"button"}>Body</Typography>
                           <TextField
                             multiline
-                            rows={3}
+                            minRows={3}
                             inputProps={{ maxLength: limits.longLimit }}
                             helperText={remaining.Body}
                             name="Body"
@@ -210,7 +209,7 @@ function Article() {
                       spacing={1}
                       sx={{ alignItems: "center", justifyContent: "flex-end" }}
                     >
-                      <Switch checked={edit} onChange={setEditMode} />
+                      <Switch data-testid="editSwitch" checked={edit} onChange={setEditMode} />
                       <Typography variant="button">Edit Mode</Typography>
                       {/* Delete button */}
                       <IconButton onClick={openDeleteDialog}>
