@@ -1,5 +1,4 @@
 import {
-  Box,
   Button,
   Card,
   CardActions,
@@ -7,20 +6,18 @@ import {
   CardMedia,
   Grid,
   Stack,
-  Switch,
   TextField,
   Typography,
 } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
-import { getPublicationDate, apiSave, apiGet } from "../services/api-interface";
+import { getPublicationDate, apiSave } from "../services/api-interface";
 import LoadingArticle from "./LoadingArticle";
 
 function NewArticle() {
   const navigate = useNavigate();
-  const [edit, setEdit] = useState(false);
   const [newArticle, setNewArticle] = useState({
     Id: uuidv4(),
     Title: "Text",
@@ -29,7 +26,6 @@ function NewArticle() {
     Body: "",
     Pic: "",
   });
-  const [article, setArticle] = useState();
 
   const [picsumHandler, setPicsumHandler] = useState({
     loading: true,
@@ -39,7 +35,7 @@ function NewArticle() {
     headerVal: "picsum-id",
   });
 
-  const [limits, setLimits] = useState({ shortLimit: 50, longLimit: 1000 });
+  const limits = { shortLimit: 50, longLimit: 1000 };
   const [remaining, setRemaining] = useState({
     Title: "50 chars",
     Author: "50 chars",
@@ -59,26 +55,11 @@ function NewArticle() {
       localStorage.setItem("author", newArticle.Author);
       // upload article
       await apiSave(newArticle).then((success) => {
-        if (success) {
+        if (success === 200) {
           navigate("/");
         }
       });
     }
-  };
-
-  const save = async (event) => {
-    event.preventDefault();
-    // update publication date
-    article.PublicationDate = getPublicationDate();
-    await apiSave(article).then((success) => {
-      if (success) {
-        navigate("/article/" + article.Id);
-      }
-    });
-  };
-
-  const setEditMode = async () => {
-    setEdit(!edit);
   };
 
   // When control loses focus, value is updated
@@ -88,7 +69,6 @@ function NewArticle() {
       ...newArticle,
       [name]: value,
     }));
-    console.log(newArticle);
   };
 
   // Twitter-like "chars remaining" indicator
@@ -101,7 +81,6 @@ function NewArticle() {
     }));
   };
 
-  
   useEffect(() => {
     // Let page know we're waiting for a pic
     setPicsumHandler((picsumHandler) => ({
@@ -141,7 +120,7 @@ function NewArticle() {
         <LoadingArticle />
       ) : (
         <Grid container sx={{ justifyContent: "center" }}>
-        <Grid item xs={12} sm={5} sx={{ justifyContent: "center" }}>
+          <Grid item xs={12} sm={5} sx={{ justifyContent: "center" }}>
             <Card sx={{ mt: 2 }}>
               <CardMedia>
                 <img src={newArticle.Pic} />
@@ -185,7 +164,7 @@ function NewArticle() {
                       <Typography variant={"button"}>Body</Typography>
                       <TextField
                         multiline
-                        rows={3}
+                        minRows={3}
                         inputProps={{ maxLength: limits.longLimit }}
                         helperText={remaining.Body}
                         name="Body"

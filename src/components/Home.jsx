@@ -6,6 +6,7 @@ import {
   ImageList,
   ImageListItem,
   ImageListItemBar,
+  TextField,
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
@@ -24,17 +25,40 @@ function Home() {
     navigate("/article/" + event.currentTarget.name);
   };
 
+  const filter = (event) => {
+    const query = event.currentTarget.value;
+    if (query.length > 0) {
+      setPosts(
+        posts.filter((post) =>
+          post.Title.toLowerCase().includes(query.toLowerCase())
+        )
+      );
+    } else if (query.length <= 0) {
+      apiGetAll().then((val) => setPosts(val));
+    }
+  };
+
   return (
     <>
       <Grid container sx={{ justifyContent: "center" }}>
         <Grid item xs={12}>
-          <Typography variant="h4" sx={{ m: 5 }}>
-            Weclome to the Insider Intelligence Internal Blog!
+          <Typography variant="h4" sx={{ m: 2 }}>
+            Welcome to the Insider Intelligence Internal Blog!
           </Typography>
           <Typography variant="caption">
             Click the icon in the upper right to add a new post, or click on any
             of the articles below to start reading!
           </Typography>
+          <Grid container sx={{ mt:2, mb:2, justifyContent: "center" }}>
+            <Grid item xs={8}>
+              <TextField
+                fullWidth
+                placeholder={"Search for an article..."}
+                onChange={filter}
+              />
+            </Grid>
+          </Grid>
+
           <Divider />
         </Grid>
         <Grid item>
