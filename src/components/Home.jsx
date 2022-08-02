@@ -43,11 +43,10 @@ function Home() {
       <Grid container sx={{ justifyContent: "center" }}>
         <Grid item xs={12}>
           <Typography variant="h4" sx={{ m: 2 }}>
-            Welcome to the Insider Intelligence Internal Blog!
+            Welcome to the Blog!
           </Typography>
           <Typography variant="caption">
-            Click the icon in the upper right to add a new post, or click on any
-            of the articles below to start reading!
+          This application is a simple blog running on a React frontend backed by AWS API Gateway and a Lambda controller persisting to a DynamoDB table. You can click the icon in the upper right to add a new post, search for an article from the list below, or click on any of the articles listed to start reading!
           </Typography>
           <Grid container sx={{ mt:2, mb:2, justifyContent: "center" }}>
             <Grid item xs={8}>
