@@ -1,5 +1,5 @@
 import React from "react";
-import logo from "../img/logo128.png";
+import logo from "../logo.svg";
 import addArticle from "../img/add128.png";
 import "../App.css";
 import { Stack, IconButton, Typography, Tooltip } from "@mui/material";
@@ -22,7 +22,7 @@ function Header() {
               variant="h5"
               sx={{ ml: 1, color: "primary.contrastText" }}
             >
-              i3 blog
+              blog.b-blue.dev
             </Typography>
           </IconButton>
         </Tooltip>
