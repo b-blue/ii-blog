@@ -100,7 +100,7 @@ function Article() {
         <LoadingArticle />
       ) : (
         <Grid container sx={{ justifyContent: "center" }}>
-        <Grid item xs={12} sm={5} sx={{ justifyContent: "center" }}>
+        <Grid item xs={12} sm={8} md={6} sx={{ justifyContent: "center" }}>
             <Card sx={{ mt: 2 }}>
               <CardMedia>
                 <img src={article.Pic} alt={article.Pic} />
